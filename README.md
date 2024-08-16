@@ -2,11 +2,11 @@
 Terminal ASCII Cube and Shapes
 
 # TODO
-Bounce off of wall functionality
-ARGP user input functionality
-Better colors (gradients/etc)
-Better display functionality (rendering contiguous block instead of individual chars)
+Bounce off of wall functionality <br />
+ARGP user input functionality <br />
+Better colors (gradients/etc) <br />
+Better display functionality (rendering contiguous block instead of individual chars) 
 
 Later Goals
-Better shapes (octagon drawing, etc.)
-Better latency (runtime optimizations)
+Better shapes (octagon drawing, etc.) <br />
+Better latency (runtime optimizations) 
