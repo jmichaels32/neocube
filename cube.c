@@ -9,7 +9,7 @@
 
 // Settings to change the way the cube animates
 float theta_increment = 0.03, phi_increment = 0.03, alpha_increment = 0.02;
-float cube_x = 0, cube_y = 0;
+float cube_x = 1, cube_y = 0;
 int width = 20;
 int camera_distance = 100;
 
@@ -85,13 +85,18 @@ int main() {
     // Render loop 
     while (1) {
         // Clear memory
-        memset(ascii_array, '.', screen_width * screen_height);
+        memset(ascii_array, ' ', screen_width * screen_height);
         memset(depth_array, 0, screen_width * screen_height * 4);
 
         // Calculate iteration of graphics
-        for (float x = -width; x < width; x += 0.1) {
-            for (float y = -width; y < width; y += 0.1) {
+        for (float x = -width; x < width; x += 0.3) {
+            for (float y = -width; y < width; y += 0.3) {
                 twoD_points(x, y, -width, '#');
+                twoD_points(width, y, x, '-');
+                twoD_points(-width, y, -x, '/');
+                twoD_points(-x, y, width, ';');
+                twoD_points(x, -width, -y, '%');
+                twoD_points(x, width, y, '?');
             }
         } 
 
@@ -108,7 +113,7 @@ int main() {
         theta += theta_increment;
         phi += phi_increment;
         alpha += alpha_increment;
-        //sleep_ms(100);
+        //sleep_ms(30);
     } 
 
     // Clean memory up
