@@ -9,7 +9,7 @@
 
 // Settings to change the way the cube animates
 float theta_increment = 0.04, phi_increment = 0.03, alpha_increment = 0.02;
-float cube_x = 1, cube_y = 0;
+float cube_x_velocity = 0.1, cube_y_velocity = 0.1;
 int width = 20;
 int camera_distance = 100;
 
@@ -18,6 +18,8 @@ char *ascii_array;
 float *depth_array;
 int *color_array;
 int screen_width, screen_height;
+int x_velocity_factor = 1, y_velocity_factor = 1;
+float cube_x = 0, cube_y = 0;
 float theta = 0, phi = 0, alpha = 0;
 
 // Return the rotated three dimensional coordinates
@@ -120,9 +122,18 @@ int main() {
             }
         }
 
+        if (cube_x >= ( screen_width - width ) / 2 || cube_x <= - 1 * (( screen_width - width ) / 2)) {
+            x_velocity_factor *= -1;
+        }
+        if (cube_y >= ( screen_height - width ) / 2 || cube_y <= - 1 * (( screen_height - width ) / 2)) {
+            y_velocity_factor *= -1;
+        }
+
         theta += theta_increment;
         phi += phi_increment;
         alpha += alpha_increment;
+        cube_x += x_velocity_factor * cube_x_velocity;
+        cube_y += y_velocity_factor * cube_y_velocity;
         //sleep_ms(30);
     } 
 
