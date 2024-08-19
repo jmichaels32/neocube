@@ -8,8 +8,8 @@
 #include "lib/util.h"
 
 // Settings to change the way the cube animates
-float theta_increment = 0.04, phi_increment = 0.03, alpha_increment = 0.02;
-float cube_x_velocity = 0.1, cube_y_velocity = 0.1;
+float theta_increment = 0.06, phi_increment = 0.03, alpha_increment = 0.02;
+float cube_x_velocity = 0.3, cube_y_velocity = 0.3;
 int width = 20;
 int camera_distance = 100;
 
@@ -113,6 +113,7 @@ int main() {
 
         // Render graphics
         printf("\x1b[2H");
+        printf("\x1b[?25l");
         for (int index = 0; index < screen_width * screen_height; ++index) {
             if (index % screen_width != 0) {
                 printf("\033[1;3%dm", color_array[index]);
