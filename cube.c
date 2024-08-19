@@ -10,8 +10,8 @@
 // Settings to change the way the cube animates
 float theta_increment = 0.06, phi_increment = 0.03, alpha_increment = 0.02;
 float cube_x_velocity = 0.3, cube_y_velocity = 0.3;
-int width = 20;
 int camera_distance = 100;
+int width;
 
 // Global variables required for functionality
 char *ascii_array;
@@ -72,6 +72,7 @@ int main() {
     struct winsize w;
     ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
     screen_width = w.ws_col, screen_height = w.ws_row - 2;
+    width = (int)(screen_height / 2);
 
     // Prepare arrays
     ascii_array = (char*)malloc(screen_width * screen_height * sizeof(char));
@@ -79,7 +80,7 @@ int main() {
     color_array = (int*)malloc(screen_width * screen_height * sizeof(int));
 
     // Make sure malloc allocated correctly
-    if (ascii_array == NULL || depth_array == NULL) {
+    if (ascii_array == NULL || depth_array == NULL || color_array == NULL) {
         fprintf(stderr, "Memory allocation failed\n"); 
         return 0;
     }
@@ -123,10 +124,12 @@ int main() {
             }
         }
 
-        if (cube_x >= ( screen_width - width ) / 2 || cube_x <= - 1 * (( screen_width - width ) / 2)) {
+        float x_cube_edge = (screen_width - width) / 2;
+        float y_cube_edge = (screen_height - width) / 2;
+        if (cube_x >= x_cube_edge || cube_x <= - x_cube_edge) {
             x_velocity_factor *= -1;
         }
-        if (cube_y >= ( screen_height - width ) / 2 || cube_y <= - 1 * (( screen_height - width ) / 2)) {
+        if (cube_y >= y_cube_edge || cube_y <= - y_cube_edge ) {
             y_velocity_factor *= -1;
         }
 
