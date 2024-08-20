@@ -8,7 +8,7 @@
 #include "lib/util.h"
 
 // Settings to change the way the cube animates
-float theta_increment = 0.06, phi_increment = 0.03, alpha_increment = 0.02;
+float theta_increment = 0.12, phi_increment = 0.06, alpha_increment = 0.08;
 float cube_x_velocity = 0.3, cube_y_velocity = 0.3;
 int camera_distance = 100;
 int width;
@@ -18,31 +18,41 @@ char *ascii_array;
 float *depth_array;
 int *color_array;
 int screen_width, screen_height;
+struct trig trig_vals;
 int x_velocity_factor = 1, y_velocity_factor = 1;
 float cube_x = 0, cube_y = 0;
 float theta = 0, phi = 0, alpha = 0;
 
+struct trig {
+    float sin_theta;
+    float cos_theta;
+    float sin_phi;
+    float cos_phi;
+    float sin_alpha;
+    float cos_alpha;
+};
+
 // Return the rotated three dimensional coordinates
 float threeD_x(int x, int y, int z) {
-    return y * sin(theta) * sin(phi) * cos(alpha) - 
-            z * cos(theta) * sin(phi) * cos(alpha) +
-            y * cos(theta) * sin(alpha) + 
-            z * sin(theta) * sin(alpha) + 
-            x * cos(phi) * cos(alpha); 
+    return y * trig_vals.sin_theta * trig_vals.sin_phi * trig_vals.cos_alpha - 
+            z * trig_vals.cos_theta * trig_vals.sin_phi * trig_vals.cos_alpha +
+            y * trig_vals.cos_theta * trig_vals.sin_alpha + 
+            z * trig_vals.sin_theta * trig_vals.sin_alpha + 
+            x * trig_vals.cos_phi * trig_vals.cos_alpha; 
 }
 
 float threeD_y(int x, int y, int z) {
-    return y * cos(theta) * cos(alpha) +
-            z * sin(theta) * cos(alpha) -
-            y * sin(theta) * sin(phi) * sin(alpha) + 
-            z * cos(theta) * sin(phi) * sin(alpha) - 
-            x * cos(phi) * sin(alpha);
+    return y * trig_vals.cos_theta * trig_vals.cos_alpha +
+            z * trig_vals.sin_theta * trig_vals.cos_alpha -
+            y * trig_vals.sin_theta * trig_vals.sin_phi * trig_vals.sin_alpha + 
+            z * trig_vals.cos_theta * trig_vals.sin_phi * trig_vals.sin_alpha - 
+            x * trig_vals.cos_phi * trig_vals.sin_alpha;
 }
 
 float threeD_z(int x, int y, int z) {
-    return z * cos(theta) * cos(phi) -
-            y * sin(theta) * cos(phi) + 
-            x * sin(phi);
+    return z * trig_vals.cos_theta * trig_vals.cos_phi -
+            y * trig_vals.sin_theta * trig_vals.cos_phi + 
+            x * trig_vals.sin_phi;
 }
 
 // Store the projected (2 dimensional) coordinates from three dimensional space
@@ -65,6 +75,15 @@ void twoD_points(int x, int y, int z, char ascii, int color) {
             color_array[index] = color;
         }
     }
+}
+
+void fill_trig(struct trig *trig_vals) {
+    trig_vals->sin_theta = sin(theta);
+    trig_vals->cos_theta = cos(theta);
+    trig_vals->sin_phi = sin(phi);
+    trig_vals->cos_phi = cos(phi);
+    trig_vals->sin_alpha = sin(alpha);
+    trig_vals->cos_alpha = cos(alpha);
 }
 
 int main() {
@@ -94,6 +113,9 @@ int main() {
         memset(ascii_array, ' ', screen_width * screen_height);
         memset(depth_array, 0, screen_width * screen_height * 4);
         memset(color_array, 7, screen_width * screen_height * 4);
+
+        // Optimization
+        fill_trig(&trig_vals);
 
         //    _
         //  _|2|___
@@ -138,13 +160,14 @@ int main() {
         alpha += alpha_increment;
         cube_x += x_velocity_factor * cube_x_velocity;
         cube_y += y_velocity_factor * cube_y_velocity;
-        //sleep_ms(30);
+        sleep_ms(100);
     } 
 
     // Clean memory up
     free(ascii_array);
     free(depth_array);
     free(color_array);
+    printf("\x1b[?25h");
     return 0;
 }
 
