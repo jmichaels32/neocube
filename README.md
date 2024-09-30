@@ -2,7 +2,8 @@
 Terminal ASCII Cube and Shapes
 
 # TODO
-Bounce off of wall functionality DONE <br />
+Check Issues
+
 ARGP user input functionality <br />
 Better colors (gradients/etc) <br />
 Better display functionality (rendering contiguous block instead of individual chars) 
