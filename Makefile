@@ -1,5 +1,5 @@
 neocube: cube.o util.o
-	gcc cube.o util.o -o neocube
+	gcc cube.o util.o -lm -o neocube
 
 cube.o: cube.c
 	gcc -c cube.c -o cube.o
